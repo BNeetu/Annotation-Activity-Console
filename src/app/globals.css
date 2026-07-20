@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+/* A quiet, consistent focus treatment -- this app's accent color rather
+   than the browser default blue -- so keyboard focus reads as part of the
+   palette instead of an unstyled afterthought. */
+:focus-visible {
+  outline: 2px solid rgb(56 91 138 / 0.5); /* navy-500 */
+  outline-offset: 2px;
+}
+
+/* Slim, unobtrusive scrollbars for the dense scroll regions (task list,
+   detail panel). */
+.styled-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225) transparent; /* slate-300 */
+}
+.styled-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.styled-scroll::-webkit-scrollbar-thumb {
+  background-color: rgb(203 213 225);
+  border-radius: 9999px;
+}
+.styled-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Highlight played once per live WebSocket update to a task row, so a
+   status/assignee change that arrives without a page reload is visibly
+   noticeable rather than a silent data change buried in a table.
+   Triggered by remounting the row (see TaskList.tsx: the row's `key`
+   includes `flashedAt`), so it never depends on a JS timer to start/stop. */
+@keyframes flash-update {
+  0% {
+    background-color: rgb(209 250 229); /* emerald-100 */
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.flash-on-update {
+  animation: flash-update 1.4s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash-on-update {
+    animation: none !important;
+  }
+}
